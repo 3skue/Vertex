@@ -1,9 +1,7 @@
 # Vertex
 
-A small UI library for exploiting.
+An exploit script built from scratch.
 
 ```
-local vertex = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/3skue/Vertex/refs/heads/main/main.luau"))()
-
-local window = vertex.newWindow()
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/3skue/Vertex/refs/heads/main/main.luau"))()
 ```
