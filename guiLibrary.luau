@@ -351,7 +351,7 @@ function vertex.newWindow()
 	return window
 end
 
-function vertex._getInstance(self, path: string, current: any?): any
+function vertex:_getInstance(path: string, current: any?): any
 	local current = current or self.ui
 	
 	for _, subpath in path:split("/") do
@@ -361,7 +361,7 @@ function vertex._getInstance(self, path: string, current: any?): any
 	return current
 end
 
-function vertex.destroy(self)
+function vertex:destroy()
 	--/ clean up children
 	for i, child in self.children do
 		child:destroy()
@@ -382,7 +382,7 @@ function vertex.destroy(self)
 	self = nil
 end
 
-function vertex.minimize(self)
+function vertex:minimize()
 	local status = self:_getInstance("background/status").instance
 	local content_container = self:_getInstance("background/content").instance
 	local background = self:_getInstance("background")
@@ -412,45 +412,45 @@ function vertex.minimize(self)
 end
 
 -- size
-function vertex.setSize(self, newValue: UDim2)
+function vertex:setSize(newValue: UDim2)
 	self.size = newValue
 	self:_getInstance("background").instance.Size = newValue
 	
 	return self
 end
 
-function vertex.getSize(self): UDim2
+function vertex:getSize(): UDim2
 	return self.size
 end
 
 -- position
-function vertex.setPosition(self, newValue: UDim2)
+function vertex:setPosition(newValue: UDim2)
 	self:_getInstance("background").instance.Position = newValue
 	
 	return self
 end
 
-function vertex.getPosition(self): UDim2
+function vertex:getPosition(): UDim2
 	return self:_getInstance("background").instance.Position
 end
 
 -- status
-function vertex.getStatus(self): string
+function vertex:getStatus(): string
 	return self:_getInstance("background/status").instance.Text
 end
 
-function vertex.setStatus(self, newValue: string)
+function vertex:setStatus(newValue: string)
 	self:_getInstance("background/status").instance.Text = newValue
 	
 	return self
 end
 
 -- title
-function vertex.getTitle(self): string
+function vertex:getTitle(self): string
 	return self:_getInstance("background/dragbar/title").instance.Text
 end
 
-function vertex.setTitle(self, newValue: string)
+function vertex:setTitle(newValue: string)
 	self:_getInstance("background/dragbar/title").instance.Text = newValue
 	
 	return self
