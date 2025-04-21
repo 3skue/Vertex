@@ -108,10 +108,10 @@ local function create(properties: {
 end
 
 -- main class
-local guiLibrary = {}
-guiLibrary.__index = guiLibrary
+local vertex = {}
+vertex.__index = vertex
 
-function guiLibrary.newWindow()
+function vertex.newWindow()
 	local window = setmetatable({
 		minimized = false;
 		size = UDim2.fromOffset(300, 500);
@@ -300,7 +300,7 @@ function guiLibrary.newWindow()
 				}
 			}
 		}
-	}, guiLibrary)
+	}, vertex)
 	
 	local background = window:_getInstance("background")
 	
@@ -351,7 +351,7 @@ function guiLibrary.newWindow()
 	return window
 end
 
-function guiLibrary._getInstance(self, path: string, current: any?): any
+function vertex._getInstance(self, path: string, current: any?): any
 	local current = current or self.ui
 	
 	for _, subpath in path:split("/") do
@@ -361,7 +361,7 @@ function guiLibrary._getInstance(self, path: string, current: any?): any
 	return current
 end
 
-function guiLibrary.destroy(self)
+function vertex.destroy(self)
 	--/ clean up children
 	for i, child in self.children do
 		child:destroy()
@@ -382,7 +382,7 @@ function guiLibrary.destroy(self)
 	self = nil
 end
 
-function guiLibrary.minimize(self)
+function vertex.minimize(self)
 	local status = self:_getInstance("background/status").instance
 	local content_container = self:_getInstance("background/content").instance
 	local background = self:_getInstance("background")
@@ -412,45 +412,45 @@ function guiLibrary.minimize(self)
 end
 
 -- size
-function guiLibrary.setSize(self, newValue: UDim2)
+function vertex.setSize(self, newValue: UDim2)
 	self.size = newValue
 	self:_getInstance("background").instance.Size = newValue
 	
 	return self
 end
 
-function guiLibrary.getSize(self): UDim2
+function vertex.getSize(self): UDim2
 	return self.size
 end
 
 -- position
-function guiLibrary.setPosition(self, newValue: UDim2)
+function vertex.setPosition(self, newValue: UDim2)
 	self:_getInstance("background").instance.Position = newValue
 	
 	return self
 end
 
-function guiLibrary.getPosition(self): UDim2
+function vertex.getPosition(self): UDim2
 	return self:_getInstance("background").instance.Position
 end
 
 -- status
-function guiLibrary.getStatus(self): string
+function vertex.getStatus(self): string
 	return self:_getInstance("background/status").instance.Text
 end
 
-function guiLibrary.setStatus(self, newValue: string)
+function vertex.setStatus(self, newValue: string)
 	self:_getInstance("background/status").instance.Text = newValue
 	
 	return self
 end
 
 -- title
-function guiLibrary.getTitle(self): string
+function vertex.getTitle(self): string
 	return self:_getInstance("background/dragbar/title").instance.Text
 end
 
-function guiLibrary.setTitle(self, newValue: string)
+function vertex.setTitle(self, newValue: string)
 	self:_getInstance("background/dragbar/title").instance.Text = newValue
 	
 	return self
@@ -504,7 +504,7 @@ do
 		return self
 	end
 	
-	function guiLibrary:label()
+	function vertex:label()
 		local label = setmetatable({
 			object = create {
 				className = "TextLabel";
@@ -579,7 +579,7 @@ do
 		return self
 	end
 	
-	function guiLibrary:button()
+	function vertex:button()
 		local button = setmetatable({
 			object = create {
 				className = "TextButton";
@@ -685,7 +685,7 @@ do
 		return self
 	end
 
-	function guiLibrary:toggle(defaultState: boolean)
+	function vertex:toggle(defaultState: boolean)
 		local toggle = self:button()
 		setmetatable(toggle, toggleClass)
 		
@@ -741,7 +741,7 @@ do
 		return self
 	end
 	
-	function guiLibrary:keybind(defaultKey: Enum.KeyCode? | Enum.UserInputType?)
+	function vertex:keybind(defaultKey: Enum.KeyCode? | Enum.UserInputType?)
 		local keybind = self:button()
 		setmetatable(keybind, keybindClass)
 		
@@ -893,7 +893,7 @@ do
 		return self.window:_getInstance("title", self.object).instance.RichText
 	end
 	
-	function guiLibrary:slider(defaultValue: string)
+	function vertex:slider(defaultValue: string)
 		local slider = setmetatable({
 			increment = 1;
 			min = 0;
@@ -1158,7 +1158,7 @@ do
 		return self
 	end
 	
-	function guiLibrary:rangeSlider(defaultStartValue: number?, defaultEndValue: number?)
+	function vertex:rangeSlider(defaultStartValue: number?, defaultEndValue: number?)
 		local rangeSlider = self:slider()
 		setmetatable(rangeSlider, rangeSliderClass)
 		
@@ -1276,7 +1276,7 @@ do
 		return self
 	end
 	
-	function guiLibrary:textbox(placeholder: string?)
+	function vertex:textbox(placeholder: string?)
 		local textbox = setmetatable({
 			object = create {
 				className = "Frame";
@@ -1410,7 +1410,7 @@ do
 		return self
 	end
 	
-	function guiLibrary:colorPicker(defaultColor: Color3?)
+	function vertex:colorPicker(defaultColor: Color3?)
 		local colorPicker = setmetatable({
 			object = create {
 				className = "Frame";
@@ -1779,7 +1779,7 @@ do
 		return self
 	end
 	
-	function guiLibrary:dropdown(defaultValue: string?)
+	function vertex:dropdown(defaultValue: string?)
 		local dropdown = setmetatable({
 			object = create {
 				className = "Frame";
@@ -1875,7 +1875,7 @@ end
 do
 	local activeNotifications = 0
 	
-	function guiLibrary:notify(properties: {
+	function vertex:notify(properties: {
 		title: string;
 		text: string;
 		duration: number?
@@ -2043,84 +2043,88 @@ do
 	end
 end
 
--- test
-local window = guiLibrary.newWindow()
-	:setTitle("UI library test")
-	:setStatus("Skibiding")
+if DEBUGGING then
+	-- test
+	local window = vertex.newWindow()
+		:setTitle("UI library test")
+		:setStatus("Skibiding")
 
-local label = window:label()
-	:setText('I want the <font color="#FF7800">orange</font> candy.')
-	:setRichText(true)
+	local label = window:label()
+		:setText('I want the <font color="#FF7800">orange</font> candy.')
+		:setRichText(true)
 
-local button = window:button()
-	:setName("<b>Open</b>")
-	:setRichText(true)
-	:setCallback(function(input)
-		print(input)
-	end)
+	local button = window:button()
+		:setName("<b>Open</b>")
+		:setRichText(true)
+		:setCallback(function(input)
+			print(input)
+		end)
 
-local toggle = window:toggle()
-	:setRichText(true)
-	:setName("<i>Jonkler Mode</i>")
-	:setState(true)
-	:setCallback(function(input)
-		print(input)
-	end)
+	local toggle = window:toggle()
+		:setRichText(true)
+		:setName("<i>Jonkler Mode</i>")
+		:setState(true)
+		:setCallback(function(input)
+			print(input)
+		end)
 
-local slider = window:slider()
-	:setValue(97)
-	:setText("Skills")
-	:setMin(90)
-	:setCallback(function(value)
-		print(value)
-	end)
+	local slider = window:slider()
+		:setValue(97)
+		:setText("Skills")
+		:setMin(90)
+		:setCallback(function(value)
+			print(value)
+		end)
 
-local rangeSlider = window:rangeSlider()
-	:setText("Skill chance")
-	:setMin(90)
-	:setValue(91, 92)
-	:setCallback(function(a, b)
-		print(a, b)
-	end)
+	local rangeSlider = window:rangeSlider()
+		:setText("Skill chance")
+		:setMin(90)
+		:setValue(91, 92)
+		:setCallback(function(a, b)
+			print(a, b)
+		end)
 
-local textbox = window:textbox()
-	:setCallback(function(value)
-		print(value)
-	end)
+	local textbox = window:textbox()
+		:setCallback(function(value)
+			print(value)
+		end)
 
-local keybind = window:keybind()
-	:setCallback(function(value)
-		print(value)
-	end)
+	local keybind = window:keybind()
+		:setCallback(function(value)
+			print(value)
+		end)
 
-local colorPicker = window:colorPicker(Color3.new(0, 0, 0))
-	:setCallback(function(input)
-		--print(input)
-	end)
+	local colorPicker = window:colorPicker(Color3.new(0, 0, 0))
+		:setCallback(function(input)
+			--print(input)
+		end)
 
-local dropdown = window:dropdown("Gyat")
-	:addItem("Gyat")
-	:addItem("Skibidi")
-	:addItem("Toiletilein")
-	:setCallback(print)
+	local dropdown = window:dropdown("Gyat")
+		:addItem("Gyat")
+		:addItem("Skibidi")
+		:addItem("Toiletilein")
+		:setCallback(print)
 
-task.wait(2)
-window:notify({
-	text = "gyat";
-	title = "title";
-})
+	task.wait(2)
+	window:notify({
+		text = "gyat";
+		title = "title";
+	})
 
-task.wait(0.5)
+	task.wait(0.5)
 
-window:notify({
-	text = "AMBATANUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUT";
-	title = "gyat2";
-	duration = 0.6
-})
+	window:notify({
+		text = "AMBATANUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUT";
+		title = "gyat2";
+		duration = 0.6
+	})
 
-task.wait(0.5)
+	task.wait(0.5)
 
-window:notify({
-	text = "gyat3";
-	title = "title";
-})
+	window:notify({
+		text = "gyat3";
+		title = "title";
+	})
+end
+
+return vertex
