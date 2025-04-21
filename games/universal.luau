@@ -1,1 +1,2 @@
-
+local window = ...
+print("Testing", window)
