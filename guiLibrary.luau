@@ -672,8 +672,8 @@ do
 		end))
 		
 		table.insert(keybind.connections, userInput.InputBegan:Connect(function(input)
-			if (input.KeyCode == keybind.value or input.UserInputType == keybind.value) and self.callback then
-				self.callback()
+			if (input.KeyCode == keybind.value or input.UserInputType == keybind.value) and keybind.callback then
+				keybind.callback()
 			end
 		end))
 
@@ -792,8 +792,8 @@ do
 		self.state = newValue
 
 		local image = self.object.children.image.instance
-		image.Image = (newValue == true and "rbxassetid://7072725342") or "rbxassetid://7072706620";
-		image.ImageColor3 = Color3.new((newValue == true and 1) or 0, (newValue == false and 1) or 0, 0)
+		image.Image = (newValue == false and "rbxassetid://7072725342") or "rbxassetid://7072706620";
+		image.ImageColor3 = Color3.new((newValue == false and 1) or 0, (newValue == true and 1) or 0, 0)
 
 		if self.callback then
 			self.callback(newValue)
