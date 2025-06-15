@@ -1472,6 +1472,12 @@ do
 		return self
 	end
 	
+	function colorPickerClass:setCallback(newValue: any)
+		self.callback = newValue
+		
+		return self
+	end
+	
 	function colorPickerClass:setColor(newValue: Color3)
 		local hue, saturation, value = newValue:ToHSV()
 		local children = self.object.children
@@ -1481,6 +1487,10 @@ do
 		children.saturationSlider.children.button.instance.Position = UDim2.fromScale(saturation, 0.5)
 		children.hexInput.PlaceHolderText = "#"..newValue:ToHex()
 		children.colorPreview.instance.BackgroundColor3 = newValue
+		
+		if self.callback then
+			self.callback(newValue)
+		end
 		
 		return self
 	end
