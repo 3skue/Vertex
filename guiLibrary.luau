@@ -649,7 +649,7 @@ do
 			connections = {};
 		}, toggleClass)
 
-		keybind:setKey(nil)
+		keybind:setKey(defaultKey)
 		
 		local instance = keybind.object.instance
 		table.insert(keybind.connections, instance.Activated:Connect(function()
@@ -672,7 +672,7 @@ do
 		end))
 		
 		table.insert(keybind.connections, userInput.InputBegan:Connect(function(input)
-			if input.KeyCode == self.value and self.callback then
+			if (input.KeyCode == keybind.value or input.UserInputType == keybind.value) and self.callback then
 				self.callback()
 			end
 		end))
@@ -860,7 +860,7 @@ do
 		cleanUp(self)
 	end
 
-	function dropdownClass:setTitle(newValue)
+	function dropdownClass:setText(newValue)
 		self.object.instance.Text = newValue
 	end
 
@@ -1044,7 +1044,7 @@ do
 		return self
 	end
 
-	function sliderClass:setTitle(newValue: string)
+	function sliderClass:setText(newValue: string)
 		self.object.children.title.instance.Text = newValue
 
 		return self
@@ -1767,7 +1767,7 @@ do
 		cleanUp(self)
 	end
 	
-	function progressBarClass:setTitle(newValue: string)
+	function progressBarClass:setText(newValue: string)
 		self.object.children.title.instance.Text = newValue
 		
 		return self
