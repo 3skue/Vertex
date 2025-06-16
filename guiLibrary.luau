@@ -589,6 +589,10 @@ do
 		end
 		
 		self.value = newValue
+
+		if self.callback then
+			self.callback(newValue)
+		end
 		
 		return self
 	end
@@ -669,12 +673,6 @@ do
 			end
 			
 			keybind:setText(oldText)
-		end))
-		
-		table.insert(keybind.connections, userInput.InputBegan:Connect(function(input)
-			if (input.KeyCode == keybind.value or input.UserInputType == keybind.value) and keybind.callback then
-				keybind.callback()
-			end
 		end))
 
 		return keybind
@@ -1224,7 +1222,7 @@ do
 	end
 
 	function rangeSliderClass:setText(newValue: string)
-		self.object.children.title.Text = newValue
+		self.object.children.title.instance.Text = newValue
 
 		return self
 	end
